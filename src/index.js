@@ -26,7 +26,7 @@ function onSearch (e) {
  e.preventDefault();
  newCardGallery.inputSearch = e.currentTarget.elements.searchQuery.value;
  newCardGallery.fetchImages().then(imagesArray => {
-  if (imagesArray == [] ) {
+  if (imagesArray = [] ) {
     console.log(imagesArray);
     return;
   }
