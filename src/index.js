@@ -6,13 +6,14 @@ import NewCardGallery from './fetchImages';
 
 const newCardGallery = new NewCardGallery();
 let imagesArray = [];
-
+let cardHeight = 200;
 
 const refs = {
   form: document.querySelector('.search-form'),
   buttonSubmit: document.querySelector('button'),
   imageCreateCard: document.querySelector(".gallery-item"),
   button: document.querySelector('.load-more'),
+  inputStyle: document.querySelector('input'),
 }
 
 refs.button.style.display = "none";
@@ -25,11 +26,15 @@ function onSearch (e) {
  e.preventDefault();
  newCardGallery.inputSearch = e.currentTarget.elements.searchQuery.value;
  newCardGallery.fetchImages().then(imagesArray => {
-  
+  if (imagesArray = [] ) {
+    console.log(imagesArray);
+    return;
+  }
   // const markup =  imageCard(imagesArray);
   // refs.imageCreateCard.insertAdjacentHTML("beforeend", markup);
   refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
   gallery.refresh();
+   
 });
  refs.button.style.display = "block";
  refs.buttonSubmit.style.display = "none";
@@ -39,9 +44,25 @@ function onLoadMore() {
   newCardGallery.fetchImages().then(imagesArray=> {
     refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
     gallery.refresh();
+    const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+       top: cardHeight * 2,
+       behavior: "smooth",
+    });
   });
   // newCardGallery.fetchImages().then(createImagesList(imagesArray));
 }
+
+function populate() {
+  while(true) {
+    let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+    if (windowRelativeBottom > document.documentElement.clientHeight + 200) break;
+   onLoadMore(imagesArray)
+  }
+}
+
+window.addEventListener('scroll', populate);
 
 
 
@@ -50,27 +71,27 @@ function createImagesList() {
    gallery.refresh();
 }
 
-   function imageCard (imagesArray) {
+function imageCard (imagesArray) {
     return imagesArray
     .map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
      return `
-     <li style = "list-style: none">
+     <li>
        <div class="photo-card">
        <a class="gallery__item" href='${largeImageURL}'>
-       <img src="${webformatURL}" alt="${tags}" loading="lazy" width = 140px/>
+       <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
      </a>
-  <div class="info">
-    <p class="info-item" style = "font-size: 10px">
-      <b>Likes: <span style = "font-style: italic">${likes}</span></b>
+  <div class="info" >
+    <p class="info-item">
+      <b>Likes: <span >${likes}</span></b>
     </p>
-    <p class="info-item" style = "font-size: 10px">
-      <b>Views: <span style = "font-style: italic">${views}</span></b>
+    <p class="info-item">
+      <b>Views: <span >${views}</span></b>
     </p>
-    <p class="info-item" style = "font-size: 10px">
-      <b>Comments:<span style = "font-style: italic"> ${comments}</span></b>
+    <p class="info-item">
+      <b>Comments:<span > ${comments}</span></b>
     </p>
-    <p class="info-item" style = "font-size: 10px">
-      <b>Downloads:<span style = "font-style: italic"> ${downloads}</span></b>
+    <p class="info-item">
+      <b>Downloads:<span > ${downloads}</span></b>
     </p>
   </div>
 </div>
@@ -79,16 +100,21 @@ function createImagesList() {
 }).join('');
 }
 
- refs.imageCreateCard.style.display = "flex"; 
- refs.imageCreateCard.style.flexWrap = "wrap";
- refs.imageCreateCard.style.gap = "20px"; 
-
-
- const gallery = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250, });
-
- function updateForm(){
+function updateForm(){
   refs.buttonSubmit.style.display = "block";
   refs.button.style.display = "none";
   newCardGallery.resetPageNumber();
  refs.imageCreateCard.innerHTML= "";
  }
+
+ const gallery = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250, });
+
+ 
+
+//  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+
+// window.scrollBy({
+//  top: cardHeight * 2,
+//  behavior: "smooth",
+// });
+

@@ -18,8 +18,9 @@ async fetchImages() {
   try { const response =  await axios.get(`${url}?key=${API}&q=${this.inputSearch}${queryParams}&per_page=${perPage}&page=${this.pageNumber}`);
   this.totalhits += 40;
   if (response.data.hits.length === 0 ) {
-    Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-    return;
+
+   return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+   
   } 
 else if (response.data.totalHits <= this.totalhits ) {
     Notify.success(`We're sorry, but you've reached the end of search results.`);
