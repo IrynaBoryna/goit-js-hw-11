@@ -31,6 +31,7 @@ function onSearch (e) {
   
     refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
   gallery.refresh();  
+  scrollSmooth ();
 });
  
 }
@@ -39,13 +40,8 @@ function onLoadMore() {
   newCardGallery.fetchImages().then(imagesArray=> {
     refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
     gallery.refresh();
-
-    const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
-    window.scrollBy({
-       top: cardHeight * 0.5,
-       behavior: "smooth",
-    });
-  });
+    scrollSmooth ();
+      });
   // newCardGallery.fetchImages().then(createImagesList(imagesArray));
 }
 
@@ -92,8 +88,13 @@ function imageCard (imagesArray) {
 
  const gallery = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250, });
 
- 
-
+ function scrollSmooth () {
+ const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+       top: cardHeight * 1.5,
+       behavior: "smooth",
+    });
+  }
 // дорозібратись!!!!
   // window.addEventListener('scroll', populate);
 
