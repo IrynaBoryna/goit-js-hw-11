@@ -5,7 +5,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import NewCardGallery from './fetchImages';
 
 const newCardGallery = new NewCardGallery();
-let imagesArray = [];
+// let imagesArray = [];
 let cardHeight = 200;
 
 const refs = {
@@ -25,19 +25,21 @@ refs.form.addEventListener('input', updateForm);
 function onSearch (e) {
  e.preventDefault();
  newCardGallery.inputSearch = e.currentTarget.elements.searchQuery.value;
- newCardGallery.fetchImages().then(imagesArray => {
-  if (imagesArray = [] ) {
-    console.log(imagesArray);
-    return;
-  }
-  // const markup =  imageCard(imagesArray);
-  // refs.imageCreateCard.insertAdjacentHTML("beforeend", markup);
-  refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
-  gallery.refresh();
-   
-});
  refs.button.style.display = "block";
  refs.buttonSubmit.style.display = "none";
+
+ newCardGallery.fetchImages().then(imagesArray => {
+  console.log(imagesArray);
+  if (imagesArray = []) {
+    console.log(imagesArray);
+   return;
+  };
+
+  refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
+  gallery.refresh();
+});
+
+
 }
      
 function onLoadMore() {
@@ -74,8 +76,8 @@ function onLoadMoreScroll() {
 
 
 function createImagesList() {
-   refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
-   gallery.refresh();
+  refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
+  gallery.refresh();
 }
 
 function imageCard (imagesArray) {
