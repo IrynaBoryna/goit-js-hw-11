@@ -5,7 +5,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import NewCardGallery from './fetchImages';
 
 const newCardGallery = new NewCardGallery();
-// let imagesArray = [];
+
 let cardHeight = 200;
 
 const refs = {
@@ -29,17 +29,10 @@ function onSearch (e) {
  refs.buttonSubmit.style.display = "none";
 
  newCardGallery.fetchImages().then(imagesArray => {
-  // console.log(imagesArray);
-  // if (imagesArray = []) {
-  //   console.log(imagesArray);
-  // //  return;
-  // };
-
   refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
   gallery.refresh();
 });
-
-
+ 
 }
      
 function onLoadMore() {
@@ -56,29 +49,12 @@ function onLoadMore() {
   // newCardGallery.fetchImages().then(createImagesList(imagesArray));
 }
 
-// window.addEventListener('scroll', populate);
-
-function populate() {
-  while(true) {
-    let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
-    if (windowRelativeBottom > document.documentElement.clientHeight + 200) break;
-   onLoadMoreScroll(imagesArray)
-  }
-}
-
-function onLoadMoreScroll() {
-  newCardGallery.fetchImages().then(imagesArray=> {
-    refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
-    gallery.refresh();
-  });
-}
-
-
-
-function createImagesList() {
-  refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
-  gallery.refresh();
-}
+function updateForm(){
+  refs.buttonSubmit.style.display = "block";
+  refs.button.style.display = "none";
+  newCardGallery.resetPageNumber();
+ refs.imageCreateCard.innerHTML= "";
+ }
 
 function imageCard (imagesArray) {
     return imagesArray
@@ -109,15 +85,31 @@ function imageCard (imagesArray) {
 }).join('');
 }
 
-function updateForm(){
-  refs.buttonSubmit.style.display = "block";
-  refs.button.style.display = "none";
-  newCardGallery.resetPageNumber();
- refs.imageCreateCard.innerHTML= "";
- }
-
  const gallery = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250, });
 
  
 
+// дорозібратись!!!!
+  // window.addEventListener('scroll', populate);
 
+ function onLoadMoreScroll() {
+  newCardGallery.fetchImages().then(imagesArray=> {
+    refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
+    gallery.refresh();
+  });
+}
+
+ function populate() {
+   while(true) {
+     let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+     if (windowRelativeBottom > document.documentElement.clientHeight + 200) break;
+    onLoadMoreScroll(imagesArray)
+   }
+ }
+
+// чому не працює так:
+//  function createImagesList() {
+//   refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
+//   gallery.refresh();
+// }
+// newCardGallery.fetchImages().then(createImagesList(imagesArray))
