@@ -1,12 +1,13 @@
 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import NewCardGallery from './fetchImages';
 
 const newCardGallery = new NewCardGallery();
-
+let imagesArray = [];
 let cardHeight = 200;
+let perPageIm = 40;
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -25,12 +26,11 @@ refs.form.addEventListener('input', updateForm);
 function onSearch (e) {
  e.preventDefault();
  newCardGallery.inputSearch = e.currentTarget.elements.searchQuery.value;
- refs.button.style.display = "block";
- refs.buttonSubmit.style.display = "none";
 
  newCardGallery.fetchImages().then(imagesArray => {
-  refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
-  gallery.refresh();
+  
+    refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
+  gallery.refresh();  
 });
  
 }
@@ -50,13 +50,18 @@ function onLoadMore() {
 }
 
 function updateForm(){
-  refs.buttonSubmit.style.display = "block";
+
   refs.button.style.display = "none";
   newCardGallery.resetPageNumber();
  refs.imageCreateCard.innerHTML= "";
  }
 
 function imageCard (imagesArray) {
+  if (imagesArray.length === perPageIm) {
+    refs.button.style.display = "block";
+  } else if (imagesArray.length <= perPageIm) {
+    refs.button.style.display = "none";
+  }
     return imagesArray
     .map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
      return `

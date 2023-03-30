@@ -11,6 +11,7 @@ export default class NewCardGallery {
     this.pageNumber === 1;
     this.inputSearch = ""; 
     this.totalhits === 0;
+    // this.perPage === 40;
     }
 
 
@@ -25,6 +26,7 @@ async fetchImages() {
 
   } else {
     Notify.success(`Hooray! We found ${this.totalhits} totalHits images.`)
+   
   }
      this.incrementPageNamber();
       return response.data.hits;
