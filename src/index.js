@@ -26,7 +26,7 @@ function onSearch (e) {
  e.preventDefault();
  newCardGallery.inputSearch = e.currentTarget.elements.searchQuery.value;
  newCardGallery.fetchImages().then(imagesArray => {
-  if (imagesArray = [] ) {
+  if (imagesArray == [] ) {
     console.log(imagesArray);
     return;
   }
@@ -44,25 +44,32 @@ function onLoadMore() {
   newCardGallery.fetchImages().then(imagesArray=> {
     refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
     gallery.refresh();
-    const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
 
+    const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
     window.scrollBy({
-       top: cardHeight * 2,
+       top: cardHeight * 0.5,
        behavior: "smooth",
     });
   });
   // newCardGallery.fetchImages().then(createImagesList(imagesArray));
 }
 
+// window.addEventListener('scroll', populate);
+
 function populate() {
   while(true) {
     let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
     if (windowRelativeBottom > document.documentElement.clientHeight + 200) break;
-   onLoadMore(imagesArray)
+   onLoadMoreScroll(imagesArray)
   }
 }
 
-window.addEventListener('scroll', populate);
+function onLoadMoreScroll() {
+  newCardGallery.fetchImages().then(imagesArray=> {
+    refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
+    gallery.refresh();
+  });
+}
 
 
 
@@ -111,10 +118,4 @@ function updateForm(){
 
  
 
-//  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
-
-// window.scrollBy({
-//  top: cardHeight * 2,
-//  behavior: "smooth",
-// });
 
