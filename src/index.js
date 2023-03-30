@@ -29,11 +29,11 @@ function onSearch (e) {
  refs.buttonSubmit.style.display = "none";
 
  newCardGallery.fetchImages().then(imagesArray => {
-  console.log(imagesArray);
-  if (imagesArray = []) {
-    console.log(imagesArray);
-   return;
-  };
+  // console.log(imagesArray);
+  // if (imagesArray = []) {
+  //   console.log(imagesArray);
+  // //  return;
+  // };
 
   refs.imageCreateCard.insertAdjacentHTML("beforeend", imageCard(imagesArray));
   gallery.refresh();
